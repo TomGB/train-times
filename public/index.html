@@ -69,6 +69,7 @@
 </div>
 <script>
   const trainTable = document.getElementById('train-table')
+  const urlParams = new URLSearchParams(window.location.search).toString()
 
   const processTrainApiResponse = response => {
     const trains = JSON.parse(response.currentTarget.response)
@@ -86,7 +87,7 @@
   const getTrains = () => {
     var xhr = new XMLHttpRequest();
 
-    xhr.open('GET', 'https://nun1eknsel.execute-api.eu-west-2.amazonaws.com/default/train-times');
+    xhr.open('GET', 'https://nun1eknsel.execute-api.eu-west-2.amazonaws.com/default/train-times?' + urlParams);
     xhr.addEventListener("load", processTrainApiResponse);
     xhr.send();
   }
