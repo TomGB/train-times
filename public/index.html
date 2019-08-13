@@ -7,6 +7,13 @@
     font-style: normal;
   }
 
+  @font-face {
+    font-family: 'dot-bold';
+    src: url('./font/dot_bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
+
   table {
     width: 100%
   }
@@ -23,7 +30,6 @@
 
   #time {
     font-family: 'dot', Arial, sans-serif;
-    font-weight: 400å;
     color: yellow;
     font-size: 60px;
     padding: 10px;
@@ -93,7 +99,7 @@
     const minutes = ('0' + today.getMinutes()).slice(-2)
     const seconds = ('0' + today.getSeconds()).slice(-2)
 
-    timeElement.innerHTML = `${hours}:${minutes}<span>:${seconds}</span>`
+    timeElement.innerHTML = `${hours}:${minutes}:<span>${seconds}</span>`
   }
 
   setInterval(setTime, 1000)
