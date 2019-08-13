@@ -1,0 +1,125 @@
+<style>
+  @font-face {
+    font-family: 'dot';
+    src: url('./font/dot_matrix_regular-webfont.woff2') format('woff2'),
+         url('./font/dot_matrix_regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  table {
+    width: 100%
+  }
+
+  th {
+    font-family: 'dot', Arial, sans-serif;
+    color: yellow;
+    font-size: 40px;
+    padding: 10px;
+    margin: 0px;
+    text-align: left;
+    font-weight: 100
+  }
+
+  #time {
+    font-family: 'dot', Arial, sans-serif;
+    font-weight: 400å;
+    color: yellow;
+    font-size: 60px;
+    padding: 10px;
+    margin: 0px;
+    text-align: center;
+    width: 100%
+  }
+
+  #time span {
+    font-size: 50px;
+  }
+
+  th:nth-child(1) {
+    width: 60px;
+  }
+
+  th:nth-child(3), th:nth-child(4) {
+    text-align: right;
+  }
+
+  .board {
+    padding: 10px;
+    width: 800px;
+    height: 240px;
+    background-color: black;
+  }
+
+  .board > div {
+    display: inline;
+  }
+</style>
+
+<div class='board'>
+  <table id='train-table'>
+    <tr>
+      <th>18:20</th>
+      <th>Harrogate</th>
+      <th>Exp 18:24</th>
+    </tr>
+    <tr>
+      <th>18:51</th>
+      <th>Poppleton</th>
+      <th>On time</th>
+    </tr>
+    <tr>
+      <th>19:20</th>
+      <th>Harrogate</th>
+      <th>On time</th>
+    </tr>
+  </table>
+  <p id='time'>12:32<span>:45</span></p>
+</div>
+<script>
+  const trainTable = document.getElementById('train-table')
+
+  const processTrainApiResponse = response => {
+    const trains = JSON.parse(response.currentTarget.response)
+
+    const table = trains.splice(0, 3).map(train => `<tr>
+      <th>${train.std}</th>
+      <th>${train.destination.location[0].locationName}</th>
+      <th>${train.platform ? train.platform : '' }</th>
+      <th>${train.etd}</th>
+    </tr>`).join('')
+
+    trainTable.innerHTML = table
+  }
+
+  const getTrains = () => {
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('GET', 'https://nun1eknsel.execute-api.eu-west-2.amazonaws.com/default/train-times');
+    xhr.addEventListener("load", processTrainApiResponse);
+    xhr.send();
+  }
+
+  setInterval(() => {
+    const timeElement = document.getElementById('time')
+
+    const today = new Date();
+    const hours = ('0' + today.getHours()).slice(-2)
+    const minutes = ('0' + today.getMinutes()).slice(-2)
+    const seconds = ('0' + today.getSeconds()).slice(-2)
+
+    console.log(hours, minutes, seconds)
+
+    timeElement.innerHTML = `${hours}:${minutes}<span>:${seconds}</span>`
+  }, 1000)
+
+  setInterval(() => {
+    console.log('getting trains')
+    const trains = getTrains()
+    console.log(trains)
+  }, 1000 * 60 * 2)
+
+  console.log('asdf')
+  const trains = getTrains()
+  console.log(trains)
+</script>
