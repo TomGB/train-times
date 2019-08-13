@@ -1,8 +1,8 @@
 <style>
   @font-face {
     font-family: 'dot';
-    src: url('./public/font/dot_matrix_regular-webfont.woff2') format('woff2'),
-         url('./public/font/dot_matrix_regular-webfont.woff') format('woff');
+    src: url('./font/dot_matrix_regular-webfont.woff2') format('woff2'),
+         url('./font/dot_matrix_regular-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
   }
@@ -58,23 +58,8 @@
 
 <div class='board'>
   <table id='train-table'>
-    <tr>
-      <th>18:20</th>
-      <th>Harrogate</th>
-      <th>Exp 18:24</th>
-    </tr>
-    <tr>
-      <th>18:51</th>
-      <th>Poppleton</th>
-      <th>On time</th>
-    </tr>
-    <tr>
-      <th>19:20</th>
-      <th>Harrogate</th>
-      <th>On time</th>
-    </tr>
   </table>
-  <p id='time'>12:32<span>:45</span></p>
+  <p id='time'></p>
 </div>
 <script>
   const trainTable = document.getElementById('train-table')
@@ -100,7 +85,7 @@
     xhr.send();
   }
 
-  setInterval(() => {
+  const setTime = () => {
     const timeElement = document.getElementById('time')
 
     const today = new Date();
@@ -108,18 +93,17 @@
     const minutes = ('0' + today.getMinutes()).slice(-2)
     const seconds = ('0' + today.getSeconds()).slice(-2)
 
-    console.log(hours, minutes, seconds)
-
     timeElement.innerHTML = `${hours}:${minutes}<span>:${seconds}</span>`
-  }, 1000)
+  }
+
+  setInterval(setTime, 1000)
 
   setInterval(() => {
     console.log('getting trains')
     const trains = getTrains()
-    console.log(trains)
   }, 1000 * 60 * 2)
 
-  console.log('asdf')
+  setTime()
   const trains = getTrains()
-  console.log(trains)
+
 </script>
